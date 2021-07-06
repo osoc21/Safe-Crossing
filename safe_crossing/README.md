@@ -1,6 +1,6 @@
 # safe_crossing
 
-Safe crossing app for visually visually impaired.
+Crosswalk assistant for visualy impaired.
 
 ## Getting Started
 
