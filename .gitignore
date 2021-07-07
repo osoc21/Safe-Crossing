@@ -107,4 +107,4 @@ dist
 .ENV
 
 # Uploads
-python_tools/uploads/*
+Backend/src/python_tools/uploads/*
