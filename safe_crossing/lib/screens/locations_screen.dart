@@ -36,17 +36,41 @@ class _LocationsScreenState extends State<LocationsScreen> {
                 itemCount: titles.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    child: ListTile(
-                      leading: Icon(icons[index]),
-                      title: Text('${titles[index]}'),
-                      trailing: Icon(Icons.keyboard_arrow_right),
+                    child: Container(
+                      height: 120,
+                      child: Center(
+                        child: ListTile(
+                          leading: Icon(
+                            icons[index],
+                            size: 40,
+                          ),
+                          title: Text(
+                            '${titles[index]}',
+                            style: TextStyle(fontSize: 40),
+                          ),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap: () {
+                            Navigator.pushNamed(context, MapScreen.routeName);
+                          },
+                        ),
+                      ),
                     ),
                   );
                 },
               ),
             ),
             ElevatedButton(
-              child: Text('Say'),
+              child: Container(
+                height: 300,
+                width: double.infinity,
+                child: Center(
+                  child: Text(
+                    'Voice',
+                    style: TextStyle(fontSize: 50),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
               onPressed: () {
                 Navigator.pushNamed(context, MapScreen.routeName);
               },
