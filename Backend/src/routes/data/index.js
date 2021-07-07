@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const createError = require('http-errors');
+// multer will help us upload multipart/form-data
+// more info at https://github.com/expressjs/multer
 const multer = require('multer');
 
 const storage = multer.diskStorage({

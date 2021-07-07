@@ -16,3 +16,8 @@ And access using your browser.
 ```
 http://localhost:3000/api/
 ```
+
+# Documentation
+
+To read more about:
+- Uploading files with [multer](https://github.com/expressjs/multer).
