@@ -5,10 +5,10 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'python_tools/uploads')
+    cb(null, 'src/python_tools/uploads');
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname)
+    cb(null, file.originalname);
   }
 })
 
@@ -20,8 +20,8 @@ module.exports = router
     res.send('This is the Data route in the API!');
   })
 
-  .post('/', upload.single('file'), (req, res, next) => {
-    // req.file is the `profile-file` file
+  .post('/', upload.single('image'), (req, res, next) => {
+    // req.file is the `image` file
     // req.body will hold the text fields, if there were any
 
     console.log(JSON.stringify(req.file));
