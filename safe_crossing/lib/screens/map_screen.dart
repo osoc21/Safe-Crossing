@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
   static const routeName = '/map-screen';
@@ -13,6 +14,14 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   int _counter = 0;
+
+  late GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -30,8 +39,22 @@ class _MapScreenState extends State<MapScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Expanded(
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 11.0,
+                ),
+              ),
+            ),
             ElevatedButton(
-                child: Text('Say $_counter'), onPressed: _incrementCounter)
+              child: Text('Say $_counter'),
+              onPressed: _incrementCounter,
+            ),
+            SizedBox(
+              height: 30,
+            )
           ],
         ),
       ),

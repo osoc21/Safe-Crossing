@@ -3,6 +3,9 @@
    <application
         android:label="safe_crossing"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyBIiQWhcafuBg-tx6P0wQ5q8QvpZx0RsHE"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
