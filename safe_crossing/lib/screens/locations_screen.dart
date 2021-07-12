@@ -23,7 +23,6 @@ class _LocationsScreenState extends State<LocationsScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             _createSizedBox(0, 30),
             Expanded(child: _createLocationsCarousel()),
@@ -36,6 +35,8 @@ class _LocationsScreenState extends State<LocationsScreen> {
               ],
             ),
             _createSizedBox(0, 30),
+            _createVoiceButton(),
+            _createSizedBox(0, 20)
           ],
         ),
       ),
@@ -91,6 +92,31 @@ class _LocationsScreenState extends State<LocationsScreen> {
     );
   }
 
+  ElevatedButton _createVoiceButton() {
+    return ElevatedButton(
+      child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.mic,
+                size: 25,
+              ),
+              Text(
+                'Voice',
+                style: TextStyle(fontSize: 24),
+                textAlign: TextAlign.center,
+              )
+            ],
+          )),
+      onPressed: () {
+        print("Voice button pressed");
+      },
+    );
+  }
+
   SizedBox _createSizedBox(double width, double height) {
     return SizedBox(
       height: height,
@@ -104,27 +130,32 @@ class _LocationsScreenState extends State<LocationsScreen> {
       items: locations.map((location) {
         return Builder(
           builder: (BuildContext context) {
-            return Container(
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.symmetric(horizontal: 5.0),
-                decoration: BoxDecoration(color: Colors.indigo),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        icons[locations.indexOf(location)],
-                        size: 40,
-                        color: Colors.white,
-                      ),
-                      _createSizedBox(15, 0),
-                      Text(
-                        '$location',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 30.0),
-                      )
-                    ]));
+            return InkWell(
+              child: Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: BoxDecoration(color: Colors.indigo),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          icons[locations.indexOf(location)],
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                        _createSizedBox(15, 0),
+                        Text(
+                          '$location',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 30.0),
+                        )
+                      ])),
+              onTap: () {
+                print("$location clicked");
+              },
+            );
           },
         );
       }).toList(),
