@@ -9,7 +9,7 @@ const trafficLightRoutes = require('./trafficLights');
 let trafficLight = mongoose.model('TrafficLight');
 
 router.get('/', (req, res, next) => {
-  res.send('Server works!');
+  res.sendFile('Server works!');
 });
 
 router.use('/data', dataRoutes);
