@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class BackendConnectionTestsScreen extends StatefulWidget {
@@ -12,14 +15,51 @@ class BackendConnectionTestsScreen extends StatefulWidget {
 
 class _BackendConnectionTestsScreenState
     extends State<BackendConnectionTestsScreen> {
+  late IO.Socket socket;
+
+  String message = "You are not connected to the socket";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Backend"),
       ),
-      body: Center(child: Text('Backend connection here')),
+      body: Column(children: [
+        Text(message),
+        ElevatedButton(
+            onPressed: connectToSocket, child: Text("Connect to socket")),
+        ElevatedButton(
+            onPressed: disconnectFromSocket,
+            child: Text("Dissconnect from socket"))
+      ]),
     );
+  }
+
+  void connectToSocket() {
+    //IO.Socket socket;
+    socket = IO.io(
+      'http://localhost:3000',
+      <String, dynamic>{
+        'transports': ['websocket']
+      },
+    );
+
+    socket.onConnect((data) {
+      this.message = "Connected to server socket";
+    });
+
+    socket.emit('from_client', "Hello from client");
+  }
+
+  void disconnectFromSocket() {
+    this.message = "disconnected from socket";
+    socket.dispose();
   }
 }
 
