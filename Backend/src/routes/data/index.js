@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const createError = require('http-errors');
 // multer will help us upload multipart/form-data
@@ -18,6 +19,9 @@ const upload = multer({ storage: storage });
 
 const simulationData = require('../../utils/readPython.js');
 
+// this is the model we'll be using
+let anchor = mongoose.model('Anchor');
+
 module.exports = router
 
   .get('/', (req, res, next) => {
@@ -28,8 +32,34 @@ module.exports = router
 
   .post('/', upload.single('image'), (req, res, next) => {
     // req.file is the `image` file
-    // req.body will hold the text fields, if there were any
 
     console.log(JSON.stringify(req.file));
     res.send('Image uploaded!');
+  })
+
+  .get('/getAnchors', (req, res, next) => {
+    anchor.find().exec()
+      .then((t) => {
+        res.send(t);
+      }).catch(err => {
+        console.log(err);
+        next(err);
+      });
+  })
+
+  .post('/postAnchor', (req, res, next) => {
+    let tempAnchor = new anchor(req.body);
+    anchor.findOne({anchorPos: tempAnchor.anchorPos}).exec()
+      .then((found) => {
+        if (found) {
+          throw new createError(400, 'This pozyx anchor already exists!');
+        }
+        return tempAnchor.save();
+      }).then((savedAnchor) => {
+        res.send (savedAnchor);
+      })
+      .catch((err) => {
+        console.log(err);
+        next(err);
+      })
   });

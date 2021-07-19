@@ -25,7 +25,7 @@ module.exports = router
     let lat = Number(req.query.latitude);
     let lon = Number(req.query.longitude);
 
-    trafficLight.findOne({latitude: lat, longitude: lon}).exec()
+    trafficLight.findOne({'coordinates.latitude': lat, 'coordinates.longitude': lon}).exec()
       .then((found) => {
         console.log(found);
         if(found) {
@@ -40,7 +40,7 @@ module.exports = router
 
   .post('/', (req, res, next) => {
     let tempTF = new trafficLight(req.body);
-    trafficLight.findOne({latitude: tempTF.latitude, longitude: tempTF.longitude}).exec()
+    trafficLight.findOne({'coordinates': tempTF.coordinates}).exec()
       .then((found) => {
         if (found) {
           throw new createError(400, 'Traffic light already exists!');
