@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safe_crossing/keys.dart';
+//import 'package:safe_crossing/keys.dart';
 import 'package:safe_crossing/widgets/input_address_text_field.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
@@ -233,20 +233,20 @@ class _MapScreenState extends State<MapScreen> {
     double destinationLongitude,
   ) async {
     polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      Keys.API_KEY, // Google Maps API Key
-      PointLatLng(startLatitude, startLongitude),
-      PointLatLng(destinationLatitude, destinationLongitude),
-      travelMode: TravelMode.walking,
-    );
+//    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+//      Keys.API_KEY, // Google Maps API Key
+//      PointLatLng(startLatitude, startLongitude),
+//      PointLatLng(destinationLatitude, destinationLongitude),
+//      travelMode: TravelMode.walking,
+//    );
 
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    }
-
-    print('pts: ${result.points}');
+//    if (result.points.isNotEmpty) {
+//      result.points.forEach((PointLatLng point) {
+//        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+//      });
+//    }
+//
+//    print('pts: ${result.points}');
 
     PolylineId id = PolylineId('poly');
     Polyline polyline = Polyline(

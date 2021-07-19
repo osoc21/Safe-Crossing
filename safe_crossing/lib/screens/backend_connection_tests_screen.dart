@@ -18,40 +18,40 @@ class _BackendConnectionTestsScreenState
 //    Uri.parse('http://localhost:3000/api/data/getSimulation'),
 //  );
 
-  Future<String> fetchData() async {
-    print("fetchData() called");
-    http.BaseRequest request = http.BaseRequest(
-      "GET",
-      Uri.parse('http://127.0.0.1:3000/api/data/getSimulation'),
-    );
-    var streamedResponse = await http.BaseRequest.send();
-    var response = await http.Response.fromStream(streamedResponse);
-
-    final response = await http.get(
-      Uri.parse('http://127.0.0.1:3000/api/data/getSimulation'),
-      headers: {"Content-type": "application/json"},
-    );
-    print("response: ${response}");
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return response.body;
-//      return Album.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load data');
-    }
-  }
+//  Future<String> fetchData() async {
+//    print("fetchData() called");
+//    http.BaseRequest request = http.BaseRequest(
+//      "GET",
+//      Uri.parse('http://127.0.0.1:3000/api/data/getSimulation'),
+//    );
+//    var streamedResponse = await http.BaseRequest.send();
+//    var response = await http.Response.fromStream(streamedResponse);
+//
+//    final response = await http.get(
+//      Uri.parse('http://127.0.0.1:3000/api/data/getSimulation'),
+//      headers: {"Content-type": "application/json"},
+//    );
+//    print("response: ${response}");
+//    if (response.statusCode == 200) {
+//      // If the server did return a 200 OK response,
+//      // then parse the JSON.
+//      return response.body;
+////      return Album.fromJson(jsonDecode(response.body));
+//    } else {
+//      // If the server did not return a 200 OK response,
+//      // then throw an exception.
+//      throw Exception('Failed to load data');
+//    }
+//  }
 
   late Future<String> futureText;
 
-  @override
-  void initState() {
-    super.initState();
-    print("initState() called");
-    futureText = fetchData();
-  }
+//  @override
+//  void initState() {
+//    super.initState();
+//    print("initState() called");
+//    futureText = fetchData();
+//  }
 
   @override
   Widget build(BuildContext context) {

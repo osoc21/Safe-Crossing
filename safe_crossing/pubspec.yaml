@@ -21,8 +21,11 @@ dependencies:
   geolocator: ^7.2.0+1
   geocoding: ^2.0.0
   location: ^4.2.0
-  # OSM
+  # OSM v1
   flutter_map: ^0.13.1
+  flutter_map_marker_cluster: ^0.4.0
+  # OSM v2
+  syncfusion_flutter_maps: ^19.2.47-beta
   # Backend connection
   web_socket_channel: ^2.1.0
   http: ^0.13.3
