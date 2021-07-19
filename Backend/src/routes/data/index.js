@@ -16,11 +16,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+const simulationData = require('../../utils/readPython.js');
+
 module.exports = router
 
   .get('/', (req, res, next) => {
     res.send('This is the Data route in the API!');
   })
+
+  .get('/getSimulation', simulationData)
 
   .post('/', upload.single('image'), (req, res, next) => {
     // req.file is the `image` file
