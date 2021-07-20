@@ -26,6 +26,8 @@ dependencies:
   flutter_map_marker_cluster: ^0.4.0
   # OSM v2
   syncfusion_flutter_maps: ^19.2.47-beta
+  # OSM v3
+  flutter_osm_plugin: ^0.8.1+2
   # Backend connection
   web_socket_channel: ^2.1.0
   http: ^0.13.3

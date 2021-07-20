@@ -4,6 +4,7 @@ import 'screens/locations_screen.dart';
 import 'screens/map_screen.dart';
 import 'package:safe_crossing/screens/osm_screen.dart';
 import 'package:safe_crossing/screens/osm_screen_2.dart';
+import 'package:safe_crossing/screens/osm_screen_3.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,8 +24,8 @@ class MyApp extends StatelessWidget {
 //        '/': (ctx) => LocationsScreen(
 //              title: 'Safe Crossing',
 //            ),
-        '/': (ctx) => OSMScreen2(),
-        OSMScreen2.routeName: (ctx) => OSMScreen2(),
+        '/': (ctx) => OSMScreen3(),
+        OSMScreen3.routeName: (ctx) => OSMScreen3(),
 //        '/': (ctx) => BackendConnectionTestsScreen(),
 //        BackendConnectionTestsScreen.routeName: (ctx) =>
 //            BackendConnectionTestsScreen(),
