@@ -13,29 +13,61 @@ from pythonosc.udp_client import SimpleUDPClient
 
 from pypozyx.tools.version_check import perform_latest_version_check
 
-if len(argv) != 2:
-    print("Pozyx kit info file name not found in command line args.")
-    quit()
 
-POZYX_KIT_INFO_FILENAME = argv[1]
+class TrafficLight:
+    def __init__(self, id, x, y):
+        self.id = id
+        self.x = x
+        self.y = y
 
 
-class MultitagPositioning(object):
+class PozyxLocalize(object):
     """Continuously performs multitag positioning"""
 
-    def __init__(self, pozyx, osc_udp_client, tag_ids, anchors, algorithm=PozyxConstants.POSITIONING_ALGORITHM_UWB_ONLY,
+    def __init__(self, pozyx, osc_udp_client, pozyx_info_file, algorithm=PozyxConstants.POSITIONING_ALGORITHM_UWB_ONLY,
                  dimension=PozyxConstants.DIMENSION_3D, height=1000):
         self.pozyx = pozyx
         self.osc_udp_client = osc_udp_client
 
-        self.tag_ids = tag_ids
-        self.anchors = anchors
+        self.TRAFFIC_LIGHT_RADIUS = 400  # in mm
+
+        self.pozyx_info_file = pozyx_info_file
+        self.tag_ids = []
+        self.anchors = []
+        self.traffic_lights = []
         self.algorithm = algorithm
         self.dimension = dimension
         self.height = height
 
     def setup(self):
         """Sets up the Pozyx for positioning by calibrating its anchor list."""
+
+        try:
+            with open(self.pozyx_info_file) as json_file:
+                data = json.load(json_file)
+
+                for anchor in data['anchors']:
+                    self.anchors.append(DeviceCoordinates(
+                        hex(int(anchor['id'], 16)),
+                        1,
+                        Coordinates(anchor['anchorPos']['x'], anchor['anchorPos']['y'], anchor['anchorPos']['z'])))
+
+                for tag in data['tags']:
+                    self.tag_ids.append(hex(int(tag['id'], 16)))
+
+                for traffic_light in data['trafficLights']:
+                    self.traffic_lights.append(TrafficLight(
+                        traffic_light['id'], traffic_light['pos']['x'], traffic_light['pos']['y']))
+        except:
+            print("Bad file format.")
+            quit()
+
+        print(self.anchors)
+        print()
+        print(self.tag_ids)
+        print()
+        print(self.traffic_lights)
+
         print("------------POZYX MULTITAG POSITIONING V{} -------------".format(version))
         print("")
         print(" - System will manually calibrate the tags")
@@ -63,22 +95,26 @@ class MultitagPositioning(object):
             status = self.pozyx.doPositioning(
                 position, self.dimension, self.height, self.algorithm, remote_id=tag_id)
             if status == POZYX_SUCCESS:
-                tag_location = [
-                    {
-                        "tagId": tag_id,
-                        "data": {
-                            "coordinates": {
-                                "x": position.x,
-                                "y": position.y,
-                                "z": position.z
-                            }
-                        }
-                    }
-                ]
-                print(tag_location)
+                optional_traffic_light_id = self.check_proximity(position)
+
+                if optional_traffic_light_id != None:
+                    print(optional_traffic_light_id)
+                print("Null")
                 # self.printPublishPosition(position, tag_id)
-            # else:
-                # self.printPublishErrorCode("positioning", tag_id)
+                sleep(0.3)
+
+    def check_proximity(self, tag_position):
+        """Checks if a tag is in radius of a traffic light and if it's the case, returns the id of that traffic light"""
+
+        for traffic_light in self.traffic_lights:
+            if (
+                (tag_position.x - traffic_light.x) * (tag_position.x - traffic_light.x) +
+                (tag_position.y - traffic_light.y) * (tag_position.y - traffic_light.y) <=
+                self.TRAFFIC_LIGHT_RADIUS * self.TRAFFIC_LIGHT_RADIUS
+            ):
+                return traffic_light.id
+
+        return None
 
     def printPublishPosition(self, position, network_id):
         """Prints the Pozyx's position and possibly sends it as a OSC packet"""
@@ -97,8 +133,8 @@ class MultitagPositioning(object):
             status = self.pozyx.clearDevices(tag_id)
             for anchor in self.anchors:
                 status &= self.pozyx.addDevice(anchor, tag_id)
-            if len(anchors) > 4:
-                status &= self.pozyx.setSelectionOfAnchors(PozyxConstants.ANCHOR_SELECT_AUTO, len(anchors),
+            if len(self.anchors) > 4:
+                status &= self.pozyx.setSelectionOfAnchors(PozyxConstants.ANCHOR_SELECT_AUTO, len(self.anchors),
                                                            remote_id=tag_id)
             # enable these if you want to save the configuration to the devices.
             if save_to_flash:
@@ -147,30 +183,11 @@ class MultitagPositioning(object):
                 sleep(0.025)
 
 
-def getAnchors():
-    anchors = []
-    with open(POZYX_KIT_INFO_FILENAME) as json_file:
-        data = json.load(json_file)
-        for anchor in data['anchors']:
-            id = hex(int(anchor['id'], 16))
-            anchors.append(DeviceCoordinates(
-                id,
-                1,
-                Coordinates(anchor['anchorPos']['x'], anchor['anchorPos']['y'], anchor['anchorPos']['z'])))
-    return anchors
-
-
-def getTags():
-    tags = [None]
-    with open(POZYX_KIT_INFO_FILENAME) as json_file:
-        data = json.load(json_file)
-        for tag in data['tags']:
-            id = hex(int(tag['id'], 16))
-            tags.append(id)
-    return tags
-
-
 if __name__ == "__main__":
+    if len(argv) != 2:
+        print("Pozyx kit info file name not found in command line args.")
+        quit()
+
     # Check for the latest PyPozyx version. Skip if this takes too long or is not needed by setting to False.
     check_pypozyx_version = True
     if check_pypozyx_version:
@@ -189,19 +206,6 @@ if __name__ == "__main__":
     ip = "127.0.0.1"
     network_port = 8888
 
-    getAnchors()
-
-    # IDs of the tags to position, add None to position the local tag as well.
-    # tag_ids = [None, 0x6712, 0x6740]
-    tag_ids = getTags()
-
-    # necessary data for calibration
-    # anchors = [DeviceCoordinates(0x6762, 1, Coordinates(0, 0, 1500)),
-    #            DeviceCoordinates(0x6706, 1, Coordinates(3700, 0, 2150)),
-    #            DeviceCoordinates(0x6E2F, 1, Coordinates(3700, 5600, 2150)),
-    #            DeviceCoordinates(0x672F, 1, Coordinates(0, 4800, 1900))]
-    anchors = getAnchors()
-
     # positioning algorithm to use, other is PozyxConstants.POSITIONING_ALGORITHM_TRACKING
     algorithm = PozyxConstants.POSITIONING_ALGORITHM_UWB_ONLY
     # algorithm = PozyxConstants.POSITIONING_ALGORITHM_TRACKING
@@ -218,8 +222,8 @@ if __name__ == "__main__":
 
     pozyx = PozyxSerial(serial_port)
 
-    r = MultitagPositioning(pozyx, osc_udp_client, tag_ids, anchors,
-                            algorithm, dimension, height)
+    r = PozyxLocalize(pozyx, osc_udp_client,
+                      argv[1], algorithm, dimension, height)
     r.setup()
     while True:
         r.loop()
