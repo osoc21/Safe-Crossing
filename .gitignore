@@ -108,3 +108,5 @@ dist
 
 # Uploads
 Backend/src/python_tools/uploads/*
+
+__pycache__
