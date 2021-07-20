@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:safe_crossing/screens/backend_connection_tests_screen.dart';
-import 'screens/locations_screen.dart';
-import 'screens/map_screen.dart';
-import 'package:safe_crossing/screens/osm_screen.dart';
+import 'package:safe_crossing/screens/traffic_light_proximity_screen.dart';
+// import 'package:safe_crossing/screens/backend_connection_tests_screen.dart';
+// import 'screens/locations_screen.dart';
+// import 'screens/map_screen.dart';
+// import 'package:safe_crossing/screens/osm_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,14 +20,17 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
       ),
       routes: {
-//        '/': (ctx) => LocationsScreen(
-//              title: 'Safe Crossing',
-//            ),
-//        '/': (ctx) => OSMScreen(),
-//        MapScreen.routeName: (ctx) => MapScreen(title: 'Map Screen'),
-        '/': (ctx) => BackendConnectionTestsScreen(),
-        BackendConnectionTestsScreen.routeName: (ctx) =>
-            BackendConnectionTestsScreen(),
+        // '/': (ctx) => LocationsScreen(
+        //       title: 'Safe Crossing',
+        //     ),
+        // '/': (ctx) => OSMScreen(),
+        // MapScreen.routeName: (ctx) => MapScreen(title: 'Map Screen'),
+        // '/': (ctx) => BackendConnectionTestsScreen(),
+        // BackendConnectionTestsScreen.routeName: (ctx) =>
+        //     BackendConnectionTestsScreen(),
+        '/': (ctx) => TrafficLightProximityScreen(),
+        TrafficLightProximityScreen.routeName: (ctx) =>
+            TrafficLightProximityScreen(),
       },
     );
   }
