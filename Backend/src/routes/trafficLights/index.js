@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const createError = require('http-errors');
 
 // this is the model we'll be using
-let trafficLight = mongoose.model('TrafficLight');
+const trafficLight = mongoose.model('TrafficLight');
 
 // Here we are using promises to have only one error handler
 // when doing mongoose queries
@@ -15,7 +15,8 @@ module.exports = router
     trafficLight.find().exec()
       .then((t) => {
         res.send(t);
-      }).catch(err => {
+      })
+      .catch(err => {
         console.log(err);
         next(err);
       });
@@ -32,7 +33,8 @@ module.exports = router
           res.send(found);
         }
         else throw new createError(400, 'Traffic light does not exist!');
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.log(err);
         next(err);
       })
@@ -54,3 +56,23 @@ module.exports = router
         next(err);
       })
   })
+
+  .put('/:id', (req, res, next) => {
+    let tempTF = new trafficLight(req.body);
+    trafficLight.findById(req.params.id).exec()
+      .then((found) => {
+        if(!found) throw new createError(400, "Couldn't find traffic light: " + req.params.id);
+        found.coordinates = tempTF.coordinates;
+        found.pozyx = tempTF.pozyx;
+        found.state = tempTF.state;
+        found.duration = tempTF.duration;
+         return found.save();
+      })
+      .then((updatedTF) => {
+        res.json(updatedTF);
+      })
+      .catch((err) => {
+        console.log(err);
+        next(err);
+      })
+  });

@@ -18,7 +18,7 @@ DB_URL="mongodb://user:password@server"
 ```
 
 ## First Steps
-To install modules using npm:
+Install modules using npm:
 ```sh
 npm install
 ```
