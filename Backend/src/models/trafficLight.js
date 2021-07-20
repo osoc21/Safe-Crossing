@@ -4,8 +4,14 @@ const objectId = mongoose.Types.ObjectId;
 const trafficLightSchema = new mongoose.Schema
 ({
   id: objectId,
-  latitude: 0,
-  longitude: 0,
+  coordinates: {
+    latitude: 0,
+    longitude: 0
+  },
+  pozyx: {
+    x: 0,
+    y: 0
+  },
   state: String,
   duration: 0
 });
