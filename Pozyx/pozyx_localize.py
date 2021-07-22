@@ -32,7 +32,7 @@ class PozyxLocalize(object):
         self.TRAFFIC_LIGHT_RADIUS = 400  # in mm
 
         self.pozyx_info_file = pozyx_info_file
-        self.tag_ids = []
+        self.tag_ids = [None, 0x6740]
         self.anchors = []
         self.traffic_lights = []
         self.algorithm = algorithm
@@ -41,48 +41,48 @@ class PozyxLocalize(object):
 
     def setup(self):
         """Sets up the Pozyx for positioning by calibrating its anchor list."""
-
+        anchor_ids = [0x672F, 0x6E2F, 0x6706, 0x6762]
         try:
             with open(self.pozyx_info_file) as json_file:
                 data = json.load(json_file)
 
                 for anchor in data['anchors']:
                     self.anchors.append(DeviceCoordinates(
-                        hex(int(anchor['id'], 16)),
+                        anchor_ids.pop(),
                         1,
                         Coordinates(anchor['anchorPos']['x'], anchor['anchorPos']['y'], anchor['anchorPos']['z'])))
 
-                for tag in data['tags']:
-                    self.tag_ids.append(hex(int(tag['id'], 16)))
+                # for tag in data['tags']:
+                #     self.tag_ids.append(hex(int(tag['id'], 16)))
 
                 for traffic_light in data['trafficLights']:
                     self.traffic_lights.append(TrafficLight(
                         traffic_light['id'], traffic_light['pos']['x'], traffic_light['pos']['y']))
         except:
-            print("Bad file format.")
+            # print("Bad file format.")
             quit()
 
-        print(self.anchors)
-        print()
-        print(self.tag_ids)
-        print()
-        print(self.traffic_lights)
+        # print(self.anchors)
+        # print()
+        # print(self.tag_ids)
+        # print()
+        # print(self.traffic_lights)
 
-        print("------------POZYX MULTITAG POSITIONING V{} -------------".format(version))
-        print("")
-        print(" - System will manually calibrate the tags")
-        print("")
-        print(" - System will then auto start positioning")
-        print("")
+        # print("------------POZYX MULTITAG POSITIONING V{} -------------".format(version))
+        # print("")
+        # print(" - System will manually calibrate the tags")
+        # print("")
+        # print(" - System will then auto start positioning")
+        # print("")
         if None in self.tag_ids:
             for device_id in self.tag_ids:
                 self.pozyx.printDeviceInfo(device_id)
         else:
             for device_id in [None] + self.tag_ids:
                 self.pozyx.printDeviceInfo(device_id)
-        print("")
-        print("------------POZYX MULTITAG POSITIONING V{} -------------".format(version))
-        print("")
+        # print("")
+        # print("------------POZYX MULTITAG POSITIONING V{} -------------".format(version))
+        # print("")
 
         self.setAnchorsManual(save_to_flash=False)
 
@@ -122,7 +122,7 @@ class PozyxLocalize(object):
             network_id = 0
         s = "POS ID: {}, x(mm): {}, y(mm): {}, z(mm): {}".format("0x%0.4x" % network_id,
                                                                  position.x, position.y, position.z)
-        print(s)
+        # print(s)
         if self.osc_udp_client is not None:
             self.osc_udp_client.send_message(
                 "/position", [network_id, position.x, position.y, position.z])
@@ -148,10 +148,10 @@ class PozyxLocalize(object):
         """Prints the configuration explicit result, prints and publishes error if one occurs"""
         if tag_id is None:
             tag_id = 0
-        if status == POZYX_SUCCESS:
-            print("Configuration of tag %s: success" % tag_id)
-        else:
-            self.printPublishErrorCode("configuration", tag_id)
+        # if status == POZYX_SUCCESS:
+        #     print("Configuration of tag %s: success" % tag_id)
+        # else:
+        #     self.printPublishErrorCode("configuration", tag_id)
 
     def printPublishErrorCode(self, operation, network_id):
         """Prints the Pozyx's error and possibly sends it as a OSC packet"""
@@ -160,23 +160,23 @@ class PozyxLocalize(object):
         if network_id is None:
             network_id = 0
         if status == POZYX_SUCCESS:
-            print("Error %s on ID %s, %s" %
-                  (operation, "0x%0.4x" % network_id, self.pozyx.getErrorMessage(error_code)))
+            # print("Error %s on ID %s, %s" %
+            #   (operation, "0x%0.4x" % network_id, self.pozyx.getErrorMessage(error_code)))
             if self.osc_udp_client is not None:
                 self.osc_udp_client.send_message(
                     "/error_%s" % operation, [network_id, error_code[0]])
         else:
             # should only happen when not being able to communicate with a remote Pozyx.
             self.pozyx.getErrorCode(error_code)
-            print("Error % s, local error code %s" %
-                  (operation, str(error_code)))
+            # print("Error % s, local error code %s" %
+            #   (operation, str(error_code)))
             if self.osc_udp_client is not None:
                 self.osc_udp_client.send_message(
                     "/error_%s" % operation, [0, error_code[0]])
 
     def printPublishAnchorConfiguration(self):
         for anchor in self.anchors:
-            print("ANCHOR,0x%0.4x,%s" % (anchor.network_id, str(anchor.pos)))
+            # print("ANCHOR,0x%0.4x,%s" % (anchor.network_id, str(anchor.pos)))
             if self.osc_udp_client is not None:
                 self.osc_udp_client.send_message(
                     "/anchor", [anchor.network_id, anchor.pos.x, anchor.pos.y, anchor.pos.z])
@@ -185,8 +185,14 @@ class PozyxLocalize(object):
 
 if __name__ == "__main__":
     if len(argv) != 2:
-        print("Pozyx kit info file name not found in command line args.")
+        # print("Pozyx kit info file name not found in command line args.")
         quit()
+
+    # with open(argv[1]) as json_file:
+    #     data = json.load(json_file)
+
+    #     for anchor in data['anchors']:
+    #         print(anchor)
 
     # Check for the latest PyPozyx version. Skip if this takes too long or is not needed by setting to False.
     check_pypozyx_version = True
@@ -196,7 +202,7 @@ if __name__ == "__main__":
     # shortcut to not have to find out the port yourself.
     serial_port = get_first_pozyx_serial_port()
     if serial_port is None:
-        print("No Pozyx connected. Check your USB cable or your driver!")
+        # print("No Pozyx connected. Check your USB cable or your driver!")
         quit()
 
     # enable to send position data through OSC

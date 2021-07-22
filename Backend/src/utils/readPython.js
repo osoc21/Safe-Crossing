@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
 
     let data = {};
     let parsedJson = {};
-    const pyScript = new PythonShell('pozyx_mqtt_simulation.py', options);
+    const pyScript = new PythonShell('pozyx_localize.py', options);
 
     console.log('before pyScript');
     //res.set('Content-Type', 'application/json');
@@ -23,9 +23,9 @@ module.exports = (req, res, next) => {
       data.coordinates = {};
       data.coordinates.long = parsedJson[0].data.coordinates.x;
       data.coordinates.lat = parsedJson[0].data.coordinates.y;
-      // console.log(data);
-      res.write(JSON.stringify(data));
-      res.write('\r\n');
+      console.log(data);
+      // res.write(JSON.stringify(data));
+      // res.write('\r\n');
       //req.io.emit('chat message', data);
     });
 

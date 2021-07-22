@@ -1,12 +1,14 @@
-module.exports = (req, res, next) => {
+module.exports = (socket) => {
+  console.log('running python script');
+
   //
   try
   {
     const createError = require('http-errors');
     const {PythonShell} = require('python-shell');
-    const jsonFile = "pozyx_kit.example.json";
-    const trafficLight = mongoose.model('TrafficLight');
+    const jsonFile = "../Pozyx/pozyx_kit_info.json";
     const mongoose = require('mongoose');
+    const trafficLight = mongoose.model('TrafficLight');
     let tmp = {};
 
 //  Available PythonShell options:
@@ -18,34 +20,38 @@ module.exports = (req, res, next) => {
 //    args: ['value1', 'value2', 'value3']
 //    };
 
+
     const options = {
       scriptPath: '../Pozyx/',
+      uid : 0,
       args: [jsonFile]
     }
 
     const pyScript = new PythonShell('pozyx_localize.py', options);
 
-    req.io.on('stop script', (socket) => {
-      next();
+    socket.on('stop script', (socket) => {
+      console.log('stop python script');
+      return;
     });
-
+    
     // we get what the python script prints
     // if it's not 'null' then it's a traffic light id
     // we then search that traffic light in the mongodb database and
     // send the status of the traffic light (red or green) to the frontend
     pyScript.on('message', (message) => {
+      console.log(message);
       if(message != 'Null')
       {
         trafficLight.findById(message, 'state').exec()
           .then((state) => {
             tmp.id = message;
             tmp.state = state;
-            req.io.emit('pozyx_data', JSON.stringify(tmp));
-          });
+            socket.emit('pozyx_data', JSON.stringify(tmp));
+          }).catch(err => {console.log("Null");});
       }
       else
       {
-        req.io.emit('pozyx_data', message);
+        socket.emit('pozyx_data', message);
       }
     });
 
@@ -59,12 +65,10 @@ module.exports = (req, res, next) => {
       console.log('finished');
     });
 
-    next();
   }
   catch(err)
   {
-    console.log(err);
-    next(err);
+    throw new createError(500, err);
   }
 
 }

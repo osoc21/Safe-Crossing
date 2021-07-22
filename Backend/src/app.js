@@ -20,8 +20,8 @@ const app = express();
 const port = 3000;
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require('socket.io');
-const io = new Server(server);
+const socketIO = require('socket.io');
+const io = socketIO(server);
 
 // Mongoose connection
 if(!dbUrl) {
@@ -35,10 +35,15 @@ mongoose.connection.on("open", (ref) => {
 });
 // Mongoose connection
 
-// this makes io available as req.io in all request handlers
-app.use((req, res, next) => {
-  req.io = io;
-  next();
+io.on('connection', (main_socket) => {
+  console.log('a user connected!');
+  main_socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  main_socket.on('run script', (socket) => {
+    callPythonScript(main_socket);
+  });
 });
 
 // bodyparser parses the request body and transforms it into a js object for easy operation
@@ -56,28 +61,15 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
-//error handler
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json(err.message);
-});
-
 server.listen(port, () => {
   console.log(`Server running on port ${port}`);
   console.log(`http://localhost:${port}/`);
 });
 
-io.on('connection', (socket) => {
-  console.log('a user connected!');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
+//error handler
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.json(err.message);
 });
-
-io.on('run script', (socket) => {
-  console.log('running python script');
-  app.use(callPythonScript);
-});
-
 
 module.exports = app;
