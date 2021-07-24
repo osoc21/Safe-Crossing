@@ -1,15 +1,15 @@
 class TrafficLight {
   final String id;
-  final String status;
+  final String state;
 
-  TrafficLight(this.id, this.status);
+  TrafficLight(this.id, this.state);
 
   TrafficLight.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        status = json['status'];
+        state = json['state'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'status': status,
+        'state': state,
       };
 }

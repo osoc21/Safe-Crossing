@@ -1,7 +1,7 @@
 
 #!/usr/bin/env python
 
-from sys import argv
+from sys import argv, stdout
 
 from time import sleep
 
@@ -29,7 +29,7 @@ class PozyxLocalize(object):
         self.pozyx = pozyx
         self.osc_udp_client = osc_udp_client
 
-        self.TRAFFIC_LIGHT_RADIUS = 400  # in mm
+        self.TRAFFIC_LIGHT_RADIUS = 800  # in mm
 
         self.pozyx_info_file = pozyx_info_file
         self.tag_ids = [None, 0x6740]
@@ -62,12 +62,6 @@ class PozyxLocalize(object):
             # print("Bad file format.")
             quit()
 
-        # print(self.anchors)
-        # print()
-        # print(self.tag_ids)
-        # print()
-        # print(self.traffic_lights)
-
         # print("------------POZYX MULTITAG POSITIONING V{} -------------".format(version))
         # print("")
         # print(" - System will manually calibrate the tags")
@@ -95,13 +89,17 @@ class PozyxLocalize(object):
             status = self.pozyx.doPositioning(
                 position, self.dimension, self.height, self.algorithm, remote_id=tag_id)
             if status == POZYX_SUCCESS:
-                optional_traffic_light_id = self.check_proximity(position)
+                if (tag_id is not None):
+                    optional_traffic_light_id = self.check_proximity(position)
 
-                if optional_traffic_light_id != None:
-                    print(optional_traffic_light_id)
-                print("Null")
-                # self.printPublishPosition(position, tag_id)
-                sleep(0.3)
+                    if optional_traffic_light_id != None:
+                        print(optional_traffic_light_id)
+                        stdout.flush()
+                    else:
+                        print("Not Close")
+                        stdout.flush()
+                    # self.printPublishPosition(position, tag_id)
+                    sleep(1)
 
     def check_proximity(self, tag_position):
         """Checks if a tag is in radius of a traffic light and if it's the case, returns the id of that traffic light"""
@@ -122,7 +120,7 @@ class PozyxLocalize(object):
             network_id = 0
         s = "POS ID: {}, x(mm): {}, y(mm): {}, z(mm): {}".format("0x%0.4x" % network_id,
                                                                  position.x, position.y, position.z)
-        # print(s)
+        print(s)
         if self.osc_udp_client is not None:
             self.osc_udp_client.send_message(
                 "/position", [network_id, position.x, position.y, position.z])
@@ -185,7 +183,7 @@ class PozyxLocalize(object):
 
 if __name__ == "__main__":
     if len(argv) != 2:
-        # print("Pozyx kit info file name not found in command line args.")
+        print("Pozyx kit info file name not found in command line args.")
         quit()
 
     # with open(argv[1]) as json_file:
@@ -196,8 +194,8 @@ if __name__ == "__main__":
 
     # Check for the latest PyPozyx version. Skip if this takes too long or is not needed by setting to False.
     check_pypozyx_version = True
-    if check_pypozyx_version:
-        perform_latest_version_check()
+    # if check_pypozyx_version:
+    #     perform_latest_version_check()
 
     # shortcut to not have to find out the port yourself.
     serial_port = get_first_pozyx_serial_port()
@@ -230,6 +228,7 @@ if __name__ == "__main__":
 
     r = PozyxLocalize(pozyx, osc_udp_client,
                       argv[1], algorithm, dimension, height)
+
     r.setup()
     while True:
         r.loop()

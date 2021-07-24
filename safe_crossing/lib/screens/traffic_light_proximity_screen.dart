@@ -109,29 +109,65 @@ class _TrafficLightProximityScreenState
       });
     });
 
-    socket.on(
-        'pozyx_data',
-        (data) => {
-              if (data != "Null")
-                {
-                  setState(() {
-                    print(data);
-                    Map<String, dynamic> trafficLightJson = jsonDecode(data);
-                    var trafficLight = TrafficLight.fromJson(trafficLightJson);
-                    _trafficLightId = trafficLight.id;
-                    _trafficLightColor = trafficLight.status == "Red"
-                        ? Colors.red
-                        : Colors.green;
-                  })
-                }
-              else
-                {
-                  setState(() {
-                    _trafficLightId = "Not close to a traffic light";
-                    _trafficLightColor = Colors.grey;
-                  })
-                }
-            });
+    socket.on('pozyx_data', handleData);
+  }
+
+  void handleData(data) {
+    print(data);
+
+    try {
+      /*  Map<String, dynamic> trafficLightJson = jsonDecode(data);
+      var trafficLight = TrafficLight.fromJson(trafficLightJson);
+
+      print(trafficLight.id);
+      print(trafficLight.state); */
+
+      setState(() {
+        if (data == "Red") {
+          _trafficLightColor = Colors.red;
+          _trafficLightId = "Close to a traffic light";
+        } else if (data == "Green") {
+          _trafficLightColor = Colors.green;
+          _trafficLightId = "Close to a traffic light";
+        } else {
+          _trafficLightColor = Colors.grey;
+          _trafficLightId = "Not close to a traffic light";
+        }
+        /*  _trafficLightId = trafficLight.id;
+        _trafficLightColor =
+            trafficLight.state == "Red" ? Colors.red : Colors.green; */
+      });
+    } catch (e) {
+      print(e.toString());
+      setState(() {
+        _trafficLightId = "Not close to a traffic light";
+        _trafficLightColor = Colors.grey;
+      });
+    }
+
+    //   if (data.toString() != "Not Close")
+    //     {
+    //       setState(() {
+    //         print(data);
+    //         Map<String, dynamic> trafficLightJson = jsonDecode(data);
+    //         var trafficLight = TrafficLight.fromJson(trafficLightJson);
+    //         _trafficLightId = trafficLight.id;
+    //         _trafficLightColor = trafficLight.status == "Red"
+    //             ? Colors.red
+    //             : Colors.green;
+    //       })
+    //     }
+    //   else if (data.toString().contains("Firmware"))
+    //     {print(data)}
+    //   else
+    //     {
+    //       setState(() {
+    //         print(data);
+    //         _trafficLightId = "Not close to a traffic light";
+    //         _trafficLightColor = Colors.grey;
+    //       })
+    //     }
+    // }
   }
 
   void runLocalizationScript() {
