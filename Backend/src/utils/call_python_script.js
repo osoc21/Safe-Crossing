@@ -4,7 +4,7 @@ module.exports = (socket) => {
     console.log('running python script');
     const createError = require('http-errors');
     const { PythonShell } = require('python-shell');
-    const jsonFile = '../Pozyx/pozyx_kit_info.json';
+    const jsonFile = './Pozyx/pozyx_kit_info.json';
     const mongoose = require('mongoose');
     const trafficLight = mongoose.model('TrafficLight');
     let tmp = {};
@@ -19,7 +19,7 @@ module.exports = (socket) => {
     //    };
 
     const options = {
-      scriptPath: '../Pozyx/',
+      scriptPath: './Pozyx/',
       args: [jsonFile],
     };
 

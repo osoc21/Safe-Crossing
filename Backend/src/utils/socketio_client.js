@@ -4,6 +4,6 @@ const io = require("socket.io-client"),
 
   ioClient.emit('run script');
 
-  ioClient.emit('stop script');
+  // ioClient.emit('stop script');
 
   ioClient.on("message", (data) => console.log(data));
