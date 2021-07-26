@@ -1,5 +1,5 @@
 # Safe Crossing
-This project is about determining which crosswalk a pedestrian is about to cross with a mobile phone and optionally hardware devices installed on the intersection. Pedestrians and specially blind people are the target audience for this project.  
+This project is about determining which crosswalk a pedestrian is about to cross with a mobile phone and optionally hardware devices installed on the intersection. Pedestrians and specially blind people are the target audience for this project. Here is the [link](https://osoc21.github.io/Safe-Crossing/) to our website.  
 
 ## Overview
 In this project, we use the Pozyx kit in order to determine the precise location of the user and if the user is close to a traffic light, we send the status of the traffic light to user's smart phone.  
