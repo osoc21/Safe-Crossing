@@ -12,6 +12,6 @@ RUN npm cache clean --force && npm install
 
 COPY . /Backend
 
-EXPOSE 3000
+EXPOSE 3000 8888
 
 CMD [ "npm", "start" ]
