@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
     const { PythonShell } = require('python-shell');
 
     const options = {
-      scriptPath: '../Pozyx/',
+      scriptPath: './Pozyx/',
     };
 
     let data = {};
@@ -24,7 +24,7 @@ module.exports = (req, res, next) => {
       data.coordinates.long = parsedJson[0].data.coordinates.x;
       data.coordinates.lat = parsedJson[0].data.coordinates.y;
       console.log(data);
-      // res.write(JSON.stringify(data));
+      res.write(JSON.stringify(data));
       // res.write('\r\n');
       //req.io.emit('chat message', data);
     });

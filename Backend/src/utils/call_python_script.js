@@ -1,27 +1,31 @@
 module.exports = (socket) => {
+  console.log('running python script');
+
   //
-  try {
-    console.log('running python script');
+  try
+  {
     const createError = require('http-errors');
-    const { PythonShell } = require('python-shell');
-    const jsonFile = './Pozyx/pozyx_kit_info.json';
+    const {PythonShell} = require('python-shell');
+    const jsonFile = "./Pozyx/pozyx_kit_info.json";
     const mongoose = require('mongoose');
     const trafficLight = mongoose.model('TrafficLight');
     let tmp = {};
 
-    //  Available PythonShell options:
-    //  let options = {
-    //    mode: 'text',
-    //    pythonPath: 'path/to/python',
-    //    pythonOptions: ['-u'], // get print results in real-time
-    //    scriptPath: 'path/to/my/scripts',
-    //    args: ['value1', 'value2', 'value3']
-    //    };
+//  Available PythonShell options:
+//  let options = {
+//    mode: 'text',
+//    pythonPath: 'path/to/python',
+//    pythonOptions: ['-u'], // get print results in real-time
+//    scriptPath: 'path/to/my/scripts',
+//    args: ['value1', 'value2', 'value3']
+//    };
+
 
     const options = {
       scriptPath: './Pozyx/',
-      args: [jsonFile],
-    };
+      uid : 0,
+      args: [jsonFile]
+    }
 
     const pyScript = new PythonShell('pozyx_localize.py', options);
 
@@ -36,33 +40,35 @@ module.exports = (socket) => {
     // send the status of the traffic light (red or green) to the frontend
     pyScript.on('message', (message) => {
       console.log(message);
-      if (message != 'Not Close') {
-        trafficLight
-          .findById(message, 'state')
-          .exec()
+      if(message != 'Null')
+      {
+        trafficLight.findById(message, 'state').exec()
           .then((state) => {
-            // tmp.id = message;
-            // tmp.state = state;
-            socket.emit('pozyx_data', state.state);
-          })
-          .catch((err) => {
-            console.log('Null');
-          });
-      } else {
+            tmp.id = message;
+            tmp.state = state;
+            socket.emit('pozyx_data', JSON.stringify(tmp));
+          }).catch(err => {console.log("Null");});
+      }
+      else
+      {
         socket.emit('pozyx_data', message);
       }
     });
 
     // end the input stream and allow the process to exit
-    pyScript.end((err, code, signal) => {
+    pyScript.end((err,code,signal) => {
+
       if (err) throw new createError(500, err);
 
       console.log('The exit code was: ' + code);
       console.log('The exit signal was: ' + signal);
       console.log('finished');
     });
-  } catch (err) {
-    console.log(err);
+
+  }
+  catch(err)
+  {
     throw new createError(500, err);
   }
-};
+
+}
