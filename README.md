@@ -9,7 +9,8 @@ This project has three main parts:
 - A backend written in NodeJS. The Backend folder also has a sub folder named Pozyx that contains the necessary code for precise localization.
 - A Frontend written in Flutter. 
 - ARKit development and experimentation. This part is completely separate from the backend and frontend parts.
-Each part has a *README* file that acts like the documentation.  
+
+**Each part has a *README* file that acts like the documentation.**
 
 ## Contributors
 
