@@ -10,14 +10,17 @@ This mode allows the application to recognise and track provided input image. Be
   <img src="images/osoc_card.png" width="200" />
 </p>
 The distance is computed between the camera position and the recognised image. Each object in the ARKit environment has a Transformation Matrix which specifies the scale, position, and translation of each object. We are primarily interested in the last column as it conveys the information about translation of the object. 
-<p float="left">
-<img src="https://latex.codecogs.com/gif.latex?\begin{bmatrix}
-r_{11} & r_{12} & r_{13} & t_{x}\\
-r_{21} & r_{22} & r_{23} & t_{y}\\
-r_{31} & r_{32} & r_{33} & t_{z}\\
-0 & 0 & 0 & s
-\end{bmatrix} " />
-</p>
+
+```
+[r11 r12 r13 tx]
+
+[r11 r12 r13 ty]
+
+[r11 r12 r13 tz]
+
+[  0   0   0  s]
+```
+
 So, subtracting crespective columns from each other and computing the Euclidean distance allows us to measure the distance to the recognised object as shown below:
 <p float="left">
   <img src="images/IMG_1076.PNG" width="200" />
