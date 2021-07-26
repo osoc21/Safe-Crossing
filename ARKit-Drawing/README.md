@@ -33,3 +33,7 @@ Another mode of application operation is based on plane detection. Plane detecti
   <img src="images/IMG_1074.PNG" width="200" />
   <img src="images/IMG_1075.PNG" width="200" />
 </p>
+
+## App information: ##
+
+The application was developed using Swift MVC paradigm and ARKit library. This combination was chosen due to the speed of development and efficient use of hardware.
