@@ -20,6 +20,11 @@ module.exports = router
   })
 
   .get('/findByLatLon/:latitude?:longitude?', (req, res, next) => {
+    if (!req.query.latitude || !req.query.longitude)
+    {
+      throw new createError(400, 'Required query params missing');
+    }
+
     let lat = Number(req.query.latitude);
     let lon = Number(req.query.longitude);
 

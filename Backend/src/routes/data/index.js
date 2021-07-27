@@ -25,9 +25,6 @@ module.exports = router
   .get('/', (req, res, next) => {
     res.send('This is the Data route in the API!');
   })
-    console.log(JSON.stringify(req.file));
-    res.send('Image uploaded!');
-  })
 
   .get('/getAnchors', (req, res, next) => {
     anchor.find().exec()
