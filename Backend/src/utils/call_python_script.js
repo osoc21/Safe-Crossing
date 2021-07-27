@@ -40,17 +40,19 @@ module.exports = (socket) => {
     // send the status of the traffic light (red or green) to the frontend
     pyScript.on('message', (message) => {
       console.log(message);
-      if(message != 'Null')
-      {
-        trafficLight.findById(message, 'state').exec()
+      if (message != 'Not Close') {
+        trafficLight
+          .findById(message, 'state')
+          .exec()
           .then((state) => {
-            tmp.id = message;
-            tmp.state = state;
-            socket.emit('pozyx_data', JSON.stringify(tmp));
-          }).catch(err => {console.log("Null");});
-      }
-      else
-      {
+            // tmp.id = message;
+            // tmp.state = state;
+            socket.emit('pozyx_data', state.state);
+          })
+          .catch((err) => {
+            console.log('Null');
+          });
+      } else {
         socket.emit('pozyx_data', message);
       }
     });
