@@ -61,12 +61,10 @@ module.exports = router
 
   .put('/:id', (req, res, next) => {
     let tempTF = new trafficLight(req.body);
-    console.log("tempTF: " + tempTF);
     trafficLight.findById(req.params.id).exec()
       .then((found) => {
         if(!found) throw new createError(400, "Couldn't find traffic light: " + req.params.id);
 
-        console.log(tempTF.coordinates.latitude != undefined);
         if(tempTF.coordinates.latitude != undefined)
           found.coordinates.latitude = tempTF.coordinates.latitude;
 
@@ -85,7 +83,6 @@ module.exports = router
         if(tempTF.duration != undefined)
           found.duration = tempTF.duration;
 
-          console.log("found: " + JSON.stringify(found));
         return found.save();
       })
       .then((updatedTF) => {
