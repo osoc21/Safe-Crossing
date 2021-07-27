@@ -29,15 +29,19 @@ module.exports = (socket) => {
 
     const pyScript = new PythonShell('pozyx_localize.py', options);
 
+    // so that the frontend can stop the localization script
+    // since the script is on a never ending loop
     socket.on('stop script', (socket) => {
       console.log('stop python script');
       return;
     });
 
     // we get what the python script prints
-    // if it's not 'null' then it's a traffic light id
+    // if it's not 'Not Close' then it's a traffic light id
     // we then search that traffic light in the mongodb database and
-    // send the status of the traffic light (red or green) to the frontend
+    // send the state of the traffic light (red or green) to the frontend
+    // if it is 'Not Close' then it means we are not close to a trafficlight
+    // the frontend still needs this information though
     pyScript.on('message', (message) => {
       console.log(message);
       if (message != 'Not Close') {
