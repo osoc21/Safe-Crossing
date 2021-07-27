@@ -6,11 +6,18 @@ In this project, we use the Pozyx kit in order to determine the precise location
 
 ## Structure of the project and repository
 This project has three main parts: 
-- A backend written in NodeJS. The Backend folder also has a sub folder named Pozyx that contains the necessary code for precise localization.
+- A backend written in NodeJS. The Backend folder also has a sub folder named Pozyx that contains the necessary code for precise localization. 
 - A Frontend written in Flutter. 
 - ARKit development and experimentation. This part is completely separate from the backend and frontend parts.
 
-**Each part has a *README* file that acts like the documentation.**
+## Documentation
+Here are the links to the documentation:  
+- [Backend documentation](https://github.com/osoc21/Safe-Crossing/blob/master/Backend/README.md)
+    - [API routes documentation](https://github.com/osoc21/Safe-Crossing/blob/master/Backend/src/routes/README.md)
+    - [Utilities documentation](https://github.com/osoc21/Safe-Crossing/blob/master/Backend/src/utils/README.md)
+  - [Pozyx Documentation](https://github.com/osoc21/Safe-Crossing/blob/master/Backend/Pozyx/README.md)
+- [Frontend documentation](https://github.com/osoc21/Safe-Crossing/blob/master/Frontend/README.md)
+- [ARKit documentation](https://github.com/osoc21/Safe-Crossing/blob/master/ARKit-Drawing/README.md)
 
 ## Contributors
 
