@@ -25,10 +25,6 @@ module.exports = router
   .get('/', (req, res, next) => {
     res.send('This is the Data route in the API!');
   })
-
-  .post('/', upload.single('image'), (req, res, next) => {
-    // req.file is the `image` file
-
     console.log(JSON.stringify(req.file));
     res.send('Image uploaded!');
   })
