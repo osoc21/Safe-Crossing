@@ -8,16 +8,48 @@ REST API written in
  for our database.
 
 Other services used include:
-- <a href="https://mlab.com/" target="_blank">mLab</a>
+- <a href="https://www.mongodb.com/cloud/atlas" target="_blank">MongoDB Atlas</a>
 for MongoDB database hosting.
 
 ## Config
-Create `.env` file in the `switch_backend` folder with this content:
+Create `.env` file in the `Backend` folder with this content:
 ```sh
-DB_URL="mongodb://user:password@server"
+DB_URL="mongodb+srv://user:password@server"
 ```
+To run the backend you have 2 choices:
 
-## First Steps
+### Docker
+To run the docker container you have 2 choices:
+
+- #### Manually
+Build docker container:
+```sh
+docker build -t safe-crossing-backend .
+```
+Run docker container:
+```sh
+docker run -p 3000:3000 -p 8888:8888 safe-crossing-backend
+```
+or
+```sh
+docker run -p 3000:3000 -p 8888:8888 -d safe-crossing-backend
+```
+to run the docker container in detached mode (runs in background).
+
+- #### Run Script
+Simply type the following in your cmd:
+```sh
+# the run script builds and runs the docker container
+sudo sh run.sh
+```
+or
+```sh
+# the run script builds and runs the docker container in detached mode
+sudo sh run.sh -d
+```
+to run the docker container in detached mode (runs in background).
+
+### Node
 Install modules using npm:
 ```sh
 npm install
@@ -40,3 +72,6 @@ To read more about:
 <a href="https://github.com/expressjs/multer" target="_blank">Multer</a>.
 - MongoDB object modeling with
 <a href="https://mongoosejs.com/" target="_blank">Mongoose</a>.
+
+- Real-time, bidirectional, event-based communication with
+<a href="https://socket.io/" target="_blank"> Socket.IO</a>.
