@@ -6,9 +6,6 @@ const createError = require('http-errors');
 // this is the model we'll be using
 const trafficLight = mongoose.model('TrafficLight');
 
-// Here we are using promises to have only one error handler
-// when doing mongoose queries
-
 module.exports = router
 
   .get('/', (req, res, next) => {

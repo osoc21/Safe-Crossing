@@ -13,22 +13,18 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   }
-})
+});
 
 const upload = multer({ storage: storage });
 
-const simulationData = require('../../utils/readPython.js');
-
 // this is the model we'll be using
-let anchor = mongoose.model('Anchor');
+const anchor = mongoose.model('Anchor');
 
 module.exports = router
 
   .get('/', (req, res, next) => {
     res.send('This is the Data route in the API!');
   })
-
-  .get('/getSimulation', simulationData)
 
   .post('/', upload.single('image'), (req, res, next) => {
     // req.file is the `image` file
