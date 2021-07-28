@@ -74,7 +74,7 @@ Here is the structure of this JSON file:
 
 ### **Anchors** 
 For the anchors, you must chose one of the anchors as the $(0,0)$ position and set up the other anchors based on the chosen anchor. For more detail on this, refer to the [Pozyx Documentation](https://docs.pozyx.io/creator/latest/python/tutorial-2-ready-to-localize-python).  
-For each anchor, you will need to enter the position of the anchor (in respect to the chosen $(0,0)$ anchor and distance measured in $mm$) and it's id like shown above.  
+For each anchor, you will need to enter the position of the anchor (in respect to the chosen $(0,0)$ anchor and distance measured in $mm$) and it's id like shown above. Be really precise when measuring the distance between anchors. It's really important that the distance entered in the JSON file are as precise as possible. If not the margin of error could be high. In out testings and if the device is set up correctly, the margin of error is between 8 to 15 $cm$.  
 
 ### **Tags**
 The only thing needed for tags is the id of the tag. The id of the gateway (the tag connected to the device) is not needed as it's already hardcoded in the code. 
