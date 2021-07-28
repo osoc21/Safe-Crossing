@@ -34,7 +34,7 @@ or
 ```sh
 docker run -p 3000:3000 -p 8888:8888 -d safe-crossing-backend
 ```
-to run the docker container in detached mode (runs in background).
+to run the docker container in detached mode (runs in the background).
 
 - #### Run Script
 Simply type the following in your cmd:
@@ -47,10 +47,10 @@ or
 # the run script builds and runs the docker container in detached mode
 sudo sh run.sh -d
 ```
-to run the docker container in detached mode (runs in background).
+to run the docker container in detached mode (runs in the background).
 
 ### Node
-Install modules using npm:
+Install dependencies using npm:
 ```sh
 npm install
 ```

@@ -1,6 +1,6 @@
 # ARKit #
 
-This application was developed as a part of Safe Crossing project during the Open Summer of Code 2021. The main idea of this app is to show the proof of concept of possible Augmented Reality (AR) overlay for route marking.
+This application was developed as part of the Safe Crossing project during the Open Summer of Code 2021. The main idea of this app is to show the proof of concept of possible Augmented Reality (AR) overlay for route marking.
 
 ## Modes: ##
 
@@ -21,7 +21,7 @@ The distance is computed between the camera position and the recognised image. E
 [  0   0   0  s]
 ```
 
-So, subtracting crespective columns from each other and computing the Euclidean distance allows us to measure the distance to the recognised object as shown below:
+So, subtracting respective columns from each other and computing the Euclidean distance allows us to measure the distance to the recognised object as shown below:
 <p float="left">
   <img src="images/IMG_1076.PNG" width="200" />
 </p>
