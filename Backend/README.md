@@ -68,8 +68,6 @@ http://localhost:3000/api/
 # Documentation
 
 To read more about:
-- Uploading files with
-<a href="https://github.com/expressjs/multer" target="_blank">Multer</a>.
 - MongoDB object modeling with
 <a href="https://mongoosejs.com/" target="_blank">Mongoose</a>.
 
