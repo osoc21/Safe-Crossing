@@ -1,13 +1,13 @@
 # Safe Crossing
-This project is about determining which crosswalk a pedestrian is about to cross with a mobile phone and optionally hardware devices installed on the intersection. Pedestrians and specially blind people are the target audience for this project. Here is the [link](https://osoc21.github.io/Safe-Crossing/) to our website.  
+This project is about determining which crosswalk a pedestrian is about to cross with a mobile phone and optional hardware devices installed on the intersection. Pedestrians, specifically blind people, are the target audience for this project. Here is the [link](https://osoc21.github.io/Safe-Crossing/) to our website.
 
 ## Overview
-In this project, we use the Pozyx kit in order to determine the precise location of the user and if the user is close to a traffic light, we send the status of the traffic light to user's smart phone.  
+In this project, we use a Pozyx kit in order to determine the precise location of the user and, if the user is close to a traffic light, we send the traffic light's status to the user's smartphone.
 
 ## Structure of the project and repository
 This project has three main parts: 
-- A backend written in NodeJS. The Backend folder also has a sub folder named Pozyx that contains the necessary code for precise localization. 
-- A Frontend written in Flutter. 
+- A backend written in NodeJS. The `Backend` folder also has a subfolder named `Pozyx` containing the necessary code for precise localization.
+- A frontend written in Flutter. 
 - ARKit development and experimentation. This part is completely separate from the backend and frontend parts.
 
 ## Documentation
